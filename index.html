@@ -1,1 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vigenère Cipher Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 400px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    textarea, input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    button {
+      width: 48%;
+      padding: 10px;
+      margin: 5px 1%;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      background: #2563eb;
+      color: #fff;
+      transition: 0.2s;
+    }
+    button:hover {
+      background: #1d4ed8;
+    }
+    .result {
+      margin-top: 15px;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #f9fafb;
+      word-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Vigenère Cipher</h2>
+    <textarea id="message" rows="4" placeholder="Enter your message..."></textarea>
+    <input type="text" id="key" placeholder="Enter key...">
+    <div>
+      <button onclick="encrypt()">Encrypt</button>
+      <button onclick="decrypt()">Decrypt</button>
+    </div>
+    <div id="output" class="result">Result will appear here...</div>
+  </div>
 
+  <script>
+    function vigenere(text, key, encrypt = true) {
+      text = text.toUpperCase().replace(/[^A-Z]/g, '');
+      key = key.toUpperCase().replace(/[^A-Z]/g, '');
+      if (key.length === 0) return "Key required!";
+
+      let result = "";
+      for (let i = 0, j = 0; i < text.length; i++) {
+        const c = text.charCodeAt(i) - 65;
+        const k = key.charCodeAt(j % key.length) - 65;
+        const shifted = encrypt ? (c + k) % 26 : (c - k + 26) % 26;
+        result += String.fromCharCode(shifted + 65);
+        j++;
+      }
+      return result;
+    }
+
+    function encrypt() {
+      const message = document.getElementById("message").value;
+      const key = document.getElementById("key").value;
+      document.getElementById("output").innerText = vigenere(message, key, true);
+    }
+
+    function decrypt() {
+      const message = document.getElementById("message").value;
+      const key = document.getElementById("key").value;
+      document.getElementById("output").innerText = vigenere(message, key, false);
+    }
+  </script>
+</body>
+</html>
